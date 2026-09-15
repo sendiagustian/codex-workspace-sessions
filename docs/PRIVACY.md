@@ -1,0 +1,21 @@
+# Privacy
+
+Codex Workspace Sessions operates on the local filesystem of the VS Code extension host. It contains no telemetry, analytics, direct HTTP client, or model-turn API calls. Live usage starts the official Codex bundled app-server as described below.
+
+Before accessing session metadata, it requires a trusted workspace and an explicit Enable action. The choice is saved in VS Code global state on that host, not Settings Sync. You can revoke it using **Codex Sessions: Disable Local Session Access**.
+
+After enablement, it enumerates the `sessions` directory under Codex home. It reads a bounded prefix of each recognized rollout file to parse the first `session_meta` record: session ID, saved working directory, timestamp, and whether its source is a subagent. Metadata for other projects is inspected solely to determine workspace membership, never displayed. A bounded read may include adjacent record bytes, but message contents and instructions are not used or persisted. It checks for an `event_msg.user_message` record within the first 8 MiB to exclude empty drafts. It reads the optional title index, retaining titles only for matching sessions.
+
+It does not open `auth.json`, environment files, config.toml, state databases, or transcript files in any editor. It never modifies, deletes, archives, migrates, or renames Codex files. Symlinked rollout files and child directories are skipped, and reads are constrained to the selected Codex home. The configured home itself may resolve to a symlink target chosen by the user.
+
+The Usage panel also reads a maximum of 1 MiB from each of the five most recently modified recognized local rollout files across projects. From those tails it uses only `event_msg` / `token_count` records with Codex `rate_limits`, retaining the observation timestamp, used percentages, window durations, and reset timestamps. Adjacent transcript bytes may be present in the bounded buffer but are not displayed or persisted. Account email, plan details, credits and other event fields are not retained. This fallback snapshot is labelled as potentially outdated and may reflect a previous account until new Codex activity records an updated snapshot.
+
+When liveUsage is enabled (the default), the extension runs only the verified official extension's bundled Codex executable, with fixed app-server arguments, no shell, a hidden process window, and the user-selected Codex home as its working directory. Workspace settings cannot choose an executable or override Codex home. The only protocol requests are initialize and account/rateLimits/read; no prompt, turn, reset-credit redemption, or account mutation is requested. The process is closed after a response, cancellation, failure, or a 10-second timeout. Output is bounded to 1 MiB and never logged. Only quota percentages, durations, reset timestamps and observation time are retained; other account response fields are discarded.
+
+The official process uses its own authentication and network access, and may update its caches, logs, databases or credentials as part of normal startup/login refresh. The extension itself does not open credential files. Turn off liveUsage in User Settings to prevent these subprocess/network reads. Native chat tabs remain governed by the official extension's own behavior.
+
+VS Code stores the consent flag per host and pinned UUIDs per workspace. Session metadata is cached in memory. Search text is kept in memory. Read-only detail tabs contain metadata; closing/disabling does not erase clipboard contents or text VS Code already holds in an open editor. Use caution when sharing screenshots of titles or paths.
+
+The **Copy CLI Resume Command** action copies only `codex resume <UUID>` to the clipboard. It does not run a shell command. New session opens the native blank composer for the current window without sending a message. Existing chat opening passes a validated UUID to the official OpenAI Codex editor. That separate extension may access credentials, session content and the network under its own policy; these operations are outside this navigator.
+
+The distributable includes only runtime JavaScript, its manifest, documentation, license, and original sidebar/catalog assets. Tests use synthetic data. No session files or user-specific paths should ever be included in a public issue or release.

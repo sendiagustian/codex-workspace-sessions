@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'nonce-{{nonce}}'; script-src 'nonce-{{nonce}}';">
+  <title>Workspace sessions</title>
+  <style nonce="{{nonce}}">{{style}}</style>
+</head>
+
+<body>
+  <div class="search">
+    <div class="field">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <circle cx="6.75" cy="6.75" r="4.25"></circle>
+        <path d="M10 10l3.5 3.5"></path>
+      </svg>
+      <input id="search" type="text" maxlength="200" placeholder="Search sessions"
+        aria-label="Search workspace sessions">
+      <button id="clear" title="Clear search" aria-label="Clear search" hidden>
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 4l8 8M12 4l-8 8"></path>
+        </svg>
+      </button>
+      <button id="new" title="New session in this workspace" aria-label="New session in this workspace">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 3.25v9.5M3.25 8h9.5"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="list" aria-label="Workspace sessions"></div>
+  <div id="message" role="status"></div>
+  <button id="enable" hidden>Enable Local Session Access</button>
+
+  <script nonce="{{nonce}}" src="{{script}}"></script>
+</body>
+
+</html>

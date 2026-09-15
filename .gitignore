@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.vsix
+docs/internal/
+.vscode-test/
+coverage/
+.aislop/
+artifacts/

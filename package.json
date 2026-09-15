@@ -1,0 +1,210 @@
+{
+  "name": "codex-workspace-sessions",
+  "displayName": "Codex Workspace Sessions",
+  "description": "Browse local Codex sessions for your workspace, start chats, and check account usage. Independent extension.",
+  "version": "0.1.12",
+  "publisher": "sendistudio",
+  "author": "Sendi Studio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sendiagustian/codex-workspace-sessions.git"
+  },
+  "homepage": "https://github.com/sendiagustian/codex-workspace-sessions#readme",
+  "bugs": {
+    "url": "https://github.com/sendiagustian/codex-workspace-sessions/issues"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "codex",
+    "sessions",
+    "workspace",
+    "chat"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "Session metadata is available only in trusted workspaces."
+    },
+    "virtualWorkspaces": {
+      "supported": false,
+      "description": "Requires local files on the extension host."
+    }
+  },
+  "activationEvents": [
+    "onView:codexWorkspaceSessions.list",
+    "onView:codexWorkspaceSessions.usage"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codexWorkspaceSessions",
+          "title": "Codex Sessions",
+          "icon": "media/icons/sessions.svg"
+        }
+      ]
+    },
+    "views": {
+      "codexWorkspaceSessions": [
+        {
+          "type": "webview",
+          "id": "codexWorkspaceSessions.usage",
+          "name": "Usage",
+          "icon": "media/icons/usage.svg",
+          "contextualTitle": "Codex Sessions",
+          "initialSize": 1
+        },
+        {
+          "id": "codexWorkspaceSessions.list",
+          "name": "Workspace Sessions",
+          "icon": "media/icons/sessions.svg",
+          "contextualTitle": "Codex Sessions",
+          "initialSize": 4,
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "codexWorkspaceSessions.enable",
+        "title": "Enable Local Session Access",
+        "category": "Codex Sessions"
+      },
+      {
+        "command": "codexWorkspaceSessions.disable",
+        "title": "Disable Local Session Access",
+        "category": "Codex Sessions"
+      },
+      {
+        "command": "codexWorkspaceSessions.refresh",
+        "title": "Refresh",
+        "category": "Codex Sessions",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "codexWorkspaceSessions.search",
+        "title": "Search Sessions",
+        "category": "Codex Sessions",
+        "icon": "$(search)"
+      },
+      {
+        "command": "codexWorkspaceSessions.open",
+        "title": "Open Session",
+        "category": "Codex Sessions"
+      },
+      {
+        "command": "codexWorkspaceSessions.details",
+        "title": "Show Session Details",
+        "category": "Codex Sessions",
+        "icon": "$(info)"
+      },
+      {
+        "command": "codexWorkspaceSessions.pin",
+        "title": "Toggle Pin",
+        "category": "Codex Sessions",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "codexWorkspaceSessions.copyResume",
+        "title": "Copy CLI Resume Command",
+        "category": "Codex Sessions",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "codexWorkspaceSessions.openCodex",
+        "title": "Open Codex Sidebar",
+        "category": "Codex Sessions"
+      },
+      {
+        "command": "codexWorkspaceSessions.newSession",
+        "title": "New Workspace Session",
+        "category": "Codex Sessions",
+        "icon": "$(add)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codexWorkspaceSessions.refresh",
+          "when": "view == codexWorkspaceSessions.list",
+          "group": "navigation@0"
+        },
+        {
+          "command": "codexWorkspaceSessions.refresh",
+          "when": "view == codexWorkspaceSessions.usage",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Codex Workspace Sessions",
+      "properties": {
+        "codexWorkspaceSessions.codexHome": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Absolute Codex home directory on this extension host. Empty uses CODEX_HOME or ~/.codex. Never read from workspace settings."
+        },
+        "codexWorkspaceSessions.refreshSeconds": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 0,
+          "maximum": 3600,
+          "scope": "window",
+          "description": "Refresh interval while the view is visible. 0 disables automatic refresh; other values are clamped to at least 5 seconds."
+        },
+        "codexWorkspaceSessions.includeSubfolders": {
+          "type": "boolean",
+          "default": false,
+          "scope": "window",
+          "description": "Include sessions whose saved working directory is inside an open workspace folder. Off matches the folder exactly."
+        },
+        "codexWorkspaceSessions.nativeTabs": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine",
+          "description": "Open original Codex tabs on explicitly supported Codex versions. Uses an undocumented integration; other versions show metadata details."
+        },
+        "codexWorkspaceSessions.liveUsage": {
+          "type": "boolean",
+          "default": true,
+          "scope": "machine",
+          "description": "Use the verified official Codex bundled app-server to read current account limits over the network using its login. No prompts are sent. Off uses local snapshots; workspace overrides are ignored."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "test": "npm run compile && node --test test/*.test.cjs",
+    "test:host": "npm run compile && node scripts/test-host.cjs",
+    "check": "npm test && npm run lint",
+    "lint": "eslint src test scripts media",
+    "vscode:prepublish": "npm run check",
+    "package": "vsce package --no-dependencies --changelog-path docs/CHANGELOG.md --out dist/build/",
+    "audit:package": "node scripts/audit-package.cjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "^22.20.2",
+    "@types/vscode": "1.100.0",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "eslint": "10.10.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "yauzl": "3.4.0"
+  },
+  "icon": "media/icons/icon.png"
+}

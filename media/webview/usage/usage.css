@@ -1,0 +1,60 @@
+/* Account usage panel. Static markup only: this webview runs without scripts. */
+body {
+  margin: 0;
+  padding: 4px 11px 8px;
+  background: var(--vscode-sideBar-background);
+  color: var(--vscode-foreground);
+  font: var(--vscode-font-size, 13px) var(--vscode-font-family, sans-serif);
+}
+
+section { margin-bottom: 9px; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+progress,
+.track {
+  display: block;
+  width: 100%;
+  height: 6px;
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--vscode-progressBar-background);
+  opacity: .9;
+}
+
+progress { appearance: none; }
+
+progress::-webkit-progress-bar,
+.track { background: var(--vscode-editorWidget-background, #333); }
+
+progress::-webkit-progress-value {
+  background: var(--vscode-progressBar-background, #888);
+  border-radius: 4px;
+}
+
+.muted {
+  color: var(--vscode-descriptionForeground);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.reset { margin-top: 3px; }
+
+p {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+@media (forced-colors: active) {
+  progress,
+  .track { border: 1px solid CanvasText; }
+
+  progress::-webkit-progress-value { background: Highlight; }
+}
