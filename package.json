@@ -2,7 +2,7 @@
   "name": "codex-workspace-sessions",
   "displayName": "Codex Workspace Sessions",
   "description": "Browse local Codex sessions for your workspace, start chats, and check account usage. Independent extension.",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "publisher": "sendistudio",
   "author": "Sendi Studio",
   "license": "MIT",

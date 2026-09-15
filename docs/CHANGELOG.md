@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.13
+
+- Add a public README preview with screenshots of the locked Codex split, workspace session sidebar, and current usage panel.
+- Include and validate the three public screenshots in the release package.
+
 ## 0.1.12
 
 - Stop a refresh from flashing the saved usage snapshot before the account reply arrives.

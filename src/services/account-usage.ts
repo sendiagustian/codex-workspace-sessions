@@ -68,6 +68,6 @@ export function requestLimits(executable: string, home: string, signal: AbortSig
         }
       }
     });
-    send({ id: 0, method: 'initialize', params: { clientInfo: { name: 'codex_workspace_sessions', version: '0.1.3' } } });
+    send({ id: 0, method: 'initialize', params: { clientInfo: { name: 'codex_workspace_sessions', version: '0.1.13' } } });
   });
 }

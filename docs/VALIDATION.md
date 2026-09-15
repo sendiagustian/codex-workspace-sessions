@@ -21,9 +21,9 @@ Diperiksa 15 September 2026 pada Windows x64, VS Code 1.137.0, dan OpenAI Codex 
 
 Aislop melaporkan informasi bahwa subprocess `npm audit` tidak dapat ditemukan di Windows (`spawn npm ENOENT`). `npm audit` dijalankan sendiri dan berhasil. File mentah lokal: `artifacts/aislop.json` dan `artifacts/host-test.json`; direktori artifacts tidak masuk VSIX.
 
-Artefak: `dist/build/codex-workspace-sessions-0.1.12.vsix`
+Artefak: `dist/build/codex-workspace-sessions-0.1.13.vsix`
 
-Checksum dapat diperiksa dengan `Get-FileHash dist/build/codex-workspace-sessions-0.1.12.vsix -Algorithm SHA256`.
+Checksum dapat diperiksa dengan `Get-FileHash dist/build/codex-workspace-sessions-0.1.13.vsix -Algorithm SHA256`.
 
 Tes host dijalankan dari terminal biasa. Bila dijalankan dari proses extension host VS Code, variabel `ELECTRON_RUN_AS_NODE=1` diwariskan ke child process sehingga `Code.exe` berjalan sebagai Node dan tes gagal dengan `bad option: --user-data-dir`; ini kondisi lingkungan, bukan kegagalan extension.
 
