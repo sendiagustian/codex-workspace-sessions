@@ -2,6 +2,26 @@
 
 An independent VS Code extension that lists local Codex chats for the workspace you have open. Built by Sendi Studio. Not affiliated with, endorsed by, or published by OpenAI. Codex is an OpenAI product.
 
+## Preview
+
+### Keep the original Codex chat beside your code
+
+Clicking a workspace session opens the original Codex conversation in a dedicated editor group on the right. The group is locked so files continue opening in the main code area, while later session clicks reuse the same Codex group.
+
+![Codex conversation open beside the main code editor in a locked split](media/screenshots/2.png)
+
+### Find workspace sessions without leaving the sidebar
+
+The sidebar lists chats saved for the currently open workspace. Search runs inline, the **+** button opens a new Codex draft, the bookmark button pins important sessions, and the **…** menu exposes details and the CLI resume command. A new draft appears in the list only after its first user message is saved.
+
+![Codex Sessions sidebar with account usage, inline search, pins, and workspace session list](media/screenshots/3.png)
+
+### See current usage as percentage used
+
+The Usage panel shows the 5-hour and weekly windows as **used percentages**, together with reset times and the account update time. It reads the current Codex account limits when available; a local fallback is clearly labelled when it may be outdated. In the comparison below, 2% used corresponds to 98% remaining and 30% used corresponds to 70% remaining in Codex.
+
+![Codex Sessions usage panel compared with the remaining usage shown by Codex](media/screenshots/1.png)
+
 ## Features
 
 - A **Codex Sessions** sidebar with session titles and last activity.

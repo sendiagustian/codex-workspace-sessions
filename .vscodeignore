@@ -12,6 +12,9 @@ docs/internal/**
 !media/icons/icon.png
 !media/icons/sessions.svg
 !media/icons/usage.svg
+!media/screenshots/1.png
+!media/screenshots/2.png
+!media/screenshots/3.png
 !media/webview/sessions/sessions.html
 !media/webview/sessions/sessions.css
 !media/webview/sessions/sessions.js
