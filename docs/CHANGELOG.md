@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.14
+
+- Split the Codex chat toward the side the primary sidebar is on instead of always to the right.
+
 ## 0.1.13
 
 - Add a public README preview with screenshots of the locked Codex split, workspace session sidebar, and current usage panel.

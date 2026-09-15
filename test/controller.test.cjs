@@ -56,7 +56,7 @@ test('subsequent and concurrent session clicks reuse the locked chat group', asy
   const second = await rollout(home, project);
   await Promise.all([controller.open(session.id), controller.open(second.id)]);
   await controller.open(session.id);
-  assert.equal(calls.filter(call => call[0] === 'workbench.action.newGroupRight').length, 1);
+  assert.equal(calls.filter(call => /^workbench\.action\.newGroup(Left|Right)$/.test(call[0])).length, 1);
   assert.equal(mock.window.tabGroups.all.length, 2);
   assert.equal(mock.window.tabGroups.all[0].locked, undefined);
   assert.equal(mock.window.tabGroups.all[1].locked, true);

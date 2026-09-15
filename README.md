@@ -6,7 +6,7 @@ An independent VS Code extension that lists local Codex chats for the workspace 
 
 ### Keep the original Codex chat beside your code
 
-Clicking a workspace session opens the original Codex conversation in a dedicated editor group on the right. The group is locked so files continue opening in the main code area, while later session clicks reuse the same Codex group.
+Clicking a workspace session opens the original Codex conversation in a dedicated editor group beside your primary sidebar, so the chat lands on the same side you launched it from. The group is locked so files continue opening in the main code area, while later session clicks reuse the same Codex group.
 
 ![Codex conversation open beside the main code editor in a locked split](media/screenshots/2.png)
 
@@ -32,7 +32,7 @@ The Usage panel shows the 5-hour and weekly windows as **used percentages**, tog
 - Start a native draft with **+**. Empty drafts stay out of the list until the first user message is saved.
 - An original catalog icon, independent of OpenAI branding.
 - Automatic refresh every 30 seconds while the view is visible.
-- Open the original Codex chat in a separate editor group on the right on a verified Codex version. Later clicks reuse a group containing only Codex tabs.
+- Open the original Codex chat in a separate editor group beside the primary sidebar on a verified Codex version. Later clicks reuse a group containing only Codex tabs.
 - Automatically lock the chat editor group so ordinary file opening keeps code outside it. Chat tabs stay open rather than using preview mode.
 - Read-only metadata details and a copyable CLI resume command when native tabs are unavailable.
 - No runtime dependencies or telemetry. Current usage is requested through the official bundled Codex app-server using its existing login; this extension does not read credentials or send prompts.

@@ -23,13 +23,19 @@ function isCodexTab(tab: vscode.Tab): boolean {
   return tab.input instanceof vscode.TabInputCustom && tab.input.viewType === CODEX_EDITOR;
 }
 
+/** Splits toward the sidebar that launched the session, so the chat lands beside it rather than across the window. */
+function newGroupCommand(): string {
+  const location = vscode.workspace.getConfiguration('workbench').get<string>('sideBar.location');
+  return location === 'right' ? 'workbench.action.newGroupRight' : 'workbench.action.newGroupLeft';
+}
+
 async function openInChatGroup(uri: vscode.Uri): Promise<void> {
   const groups = vscode.window.tabGroups;
   const chatGroups = groups.all.length > 1 ? groups.all.filter(group => group.tabs.length > 0 && group.tabs.every(isCodexTab)) : [];
   const existing = chatGroups.find(group => group.tabs.some(tab => tab.input instanceof vscode.TabInputCustom && tab.input.uri.path === uri.path)) ?? chatGroups[0];
   let column = existing?.viewColumn;
   if (column === undefined) {
-    await vscode.commands.executeCommand('workbench.action.newGroupRight');
+    await vscode.commands.executeCommand(newGroupCommand());
     column = groups.activeTabGroup.viewColumn;
   }
   await vscode.commands.executeCommand('vscode.openWith', uri, CODEX_EDITOR, {

@@ -56,7 +56,7 @@ function vscodeMock(home, project) {
   mock.commands.executeCommand = async (...args) => {
     calls.push(args);
     const groups = mock.window.tabGroups;
-    if (args[0] === 'workbench.action.newGroupRight') {
+    if (args[0] === 'workbench.action.newGroupRight' || args[0] === 'workbench.action.newGroupLeft') {
       groups.current = { viewColumn: groups.all.length + 1, tabs: [] };
       groups.all.push(groups.current);
     } else if (args[0] === 'vscode.openWith') {

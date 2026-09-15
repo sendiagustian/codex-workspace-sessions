@@ -29,13 +29,30 @@ test('new chat opens the native draft in a locked split, without inventing a ses
   await controller.newSession();
   await controller.newSession();
   assert.equal(controller.provider.getChildren().length, 0);
-  assert.equal(calls.filter(call => call[0] === 'workbench.action.newGroupRight').length, 1);
+  assert.equal(calls.filter(call => /^workbench\.action\.newGroup(Left|Right)$/.test(call[0])).length, 1);
   assert.equal(calls.find(call => call[0] === 'vscode.openWith')[1].path, '/extension/panel/new');
   assert.ok(calls.some(call => call[0] === 'workbench.action.lockEditorGroup'));
   calls.length = 0;
   mock.workspace.workspaceFolders = [];
   await controller.newSession();
   assert.equal(calls.length, 0);
+});
+
+test('the chat group splits toward the side the primary sidebar is on', async t => {
+  const { home, project } = await fixture(t);
+  const session = await rollout(home, project);
+  const split = async settings => {
+    const context = vscodeMock(home, project);
+    Object.assign(context.settings, settings);
+    const { SessionController } = loadWithVscode(context.mock, '../dist/controller/session-controller');
+    const controller = new SessionController(new Memento({ localAccess: true }), new Memento());
+    t.after(() => controller.dispose());
+    await controller.open(session.id);
+    return context.calls.find(call => /^workbench\.action\.newGroup(Left|Right)$/.test(call[0]))?.[0];
+  };
+  assert.equal(await split({ 'sideBar.location': 'right' }), 'workbench.action.newGroupRight');
+  assert.equal(await split({ 'sideBar.location': 'left' }), 'workbench.action.newGroupLeft');
+  assert.equal(await split({}), 'workbench.action.newGroupLeft', 'VS Code defaults the sidebar to the left');
 });
 
 test('sidebar search focuses the view without a popup; webview rejects arbitrary actions and IDs', async t => {
