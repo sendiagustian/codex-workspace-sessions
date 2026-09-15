@@ -192,6 +192,7 @@
     "check": "npm test && npm run lint",
     "lint": "eslint src test scripts media",
     "vscode:prepublish": "npm run check",
+    "prepackage": "node -e \"require('node:fs').mkdirSync('dist/build', { recursive: true })\"",
     "package": "vsce package --no-dependencies --changelog-path docs/CHANGELOG.md --out dist/build/",
     "audit:package": "node scripts/audit-package.cjs"
   },
