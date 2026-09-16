@@ -2,8 +2,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const { fixture, rollout } = require('./fixtures.cjs');
-const { loadWithVscode, vscodeMock, Memento } = require('./vscode-mock.cjs');
+const { fixture, rollout } = require('./helpers/fixtures.cjs');
+const { loadWithVscode, vscodeMock, Memento } = require('./helpers/vscode-mock.cjs');
 const { SessionStore } = require('../dist/services/session-store');
 const { parseAccountUsage } = require('../dist/model/usage');
 

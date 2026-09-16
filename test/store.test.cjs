@@ -4,7 +4,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const { SessionStore } = require('../dist/services/session-store');
 const { readPrefix } = require('../dist/services/local-files');
-const { fixture, rollout } = require('./fixtures.cjs');
+const { fixture, rollout } = require('./helpers/fixtures.cjs');
 
 test('only exact workspace sessions are shown; titles update; archives and subagents stay out', async t => {
   const { home, project } = await fixture(t);

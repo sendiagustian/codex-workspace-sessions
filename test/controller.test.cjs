@@ -1,8 +1,8 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
-const { fixture, rollout } = require('./fixtures.cjs');
-const { loadWithVscode, Memento, vscodeMock } = require('./vscode-mock.cjs');
+const { fixture, rollout } = require('./helpers/fixtures.cjs');
+const { loadWithVscode, Memento, vscodeMock } = require('./helpers/vscode-mock.cjs');
 
 async function setup(t, enabled = true) {
   const files = await fixture(t);

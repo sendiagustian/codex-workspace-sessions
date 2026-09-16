@@ -6,8 +6,8 @@ const { parseUsage } = require('../dist/model/usage');
 const { readLatestUsage } = require('../dist/services/usage-reader');
 const { readTail } = require('../dist/services/local-files');
 const { SessionStore } = require('../dist/services/session-store');
-const { fixture, rollout } = require('./fixtures.cjs');
-const { loadWithVscode, vscodeMock, Memento } = require('./vscode-mock.cjs');
+const { fixture, rollout } = require('./helpers/fixtures.cjs');
+const { loadWithVscode, vscodeMock, Memento } = require('./helpers/vscode-mock.cjs');
 
 const observedAt = '2026-09-14T10:00:00Z';
 function event(percent = 0, overrides = {}) {

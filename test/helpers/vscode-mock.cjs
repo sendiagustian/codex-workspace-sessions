@@ -2,13 +2,13 @@ const Module = require('node:module');
 const path = require('node:path');
 
 function loadWithVscode(mock, file) {
-  const root = path.resolve(__dirname, '../dist') + path.sep;
+  const root = path.resolve(__dirname, '../../dist') + path.sep;
   for (const key of Object.keys(require.cache)) if (key.startsWith(root)) delete require.cache[key];
   const original = Module._load;
   Module._load = function (request, parent, isMain) {
     return request === 'vscode' ? mock : original(request, parent, isMain);
   };
-  try { return require(file); }
+  try { return require(path.resolve(__dirname, '..', file)); }
   finally { Module._load = original; }
 }
 
