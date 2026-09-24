@@ -2,7 +2,7 @@
   "name": "codex-workspace-sessions",
   "displayName": "Codex Workspace Sessions",
   "description": "Browse local Codex sessions for your workspace, start chats, and check account usage. Independent extension.",
-  "version": "0.1.14",
+  "version": "0.1.16",
   "publisher": "sendistudio",
   "author": "Sendi Studio",
   "license": "MIT",
@@ -173,13 +173,13 @@
           "type": "boolean",
           "default": true,
           "scope": "machine",
-          "description": "Open original Codex tabs on explicitly supported Codex versions. Uses an undocumented integration; other versions show metadata details."
+          "description": "Open original Codex tabs through the installed official extension. Uses an undocumented integration and falls back to metadata when opening fails."
         },
         "codexWorkspaceSessions.liveUsage": {
           "type": "boolean",
           "default": true,
           "scope": "machine",
-          "description": "Use the verified official Codex bundled app-server to read current account limits over the network using its login. No prompts are sent. Off uses local snapshots; workspace overrides are ignored."
+          "description": "Use the installed official Codex bundled app-server to read current account limits over the network using its login. No prompts are sent. Off uses local snapshots; workspace overrides are ignored."
         }
       }
     }

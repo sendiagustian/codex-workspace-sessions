@@ -48,7 +48,8 @@ async function run() {
     assert.equal(tab.isPreview, false);
     const chatGroup = tab.group;
     assert.notEqual(chatGroup, mainGroup, 'Chat is separate from the main code editor');
-    assert.ok(chatGroup.viewColumn > mainGroup.viewColumn, 'Chat is on the right');
+    const sidebarOnRight = vscode.workspace.getConfiguration('workbench').get('sideBar.location') === 'right';
+    assert.equal(chatGroup.viewColumn > mainGroup.viewColumn, sidebarOnRight, 'Chat is split toward the primary sidebar');
     const groupCount = vscode.window.tabGroups.all.length;
     assert.equal(await openNativeSession(nativeSession, true), undefined);
     assert.equal(vscode.window.tabGroups.all.length, groupCount, 'Repeat click reuses the chat group');
@@ -61,7 +62,7 @@ async function run() {
     const draft = chatGroup.tabs.find(tab => tab.input instanceof vscode.TabInputCustom && tab.input.uri.path === '/extension/panel/new');
     assert.ok(draft, 'New session opens the native draft composer in the existing chat group');
     await vscode.window.tabGroups.close(draft);
-    console.log('PASS: original Codex tab opens in a reused right group; group lock keeps new code files outside (no prompt sent).');
+    console.log('PASS: original Codex tab opens in a reused sidebar-adjacent group; group lock keeps new code files outside (no prompt sent).');
     await vscode.window.tabGroups.close(tab);
   }
   console.log('PASS: VS Code host activation, commands, consent-disabled actions, session panel and document provider.');
@@ -72,7 +73,7 @@ async function run() {
     consentDisabledActions: 'passed', sessionAndDocumentProviders: 'passed',
     usageViewRegistration: 'passed',
     nativeTabRouting: process.env.CODEX_NATIVE_SESSION_ID ? 'passed' : 'not requested',
-    rightSplitAndLock: process.env.CODEX_NATIVE_SESSION_ID ? 'passed' : 'not requested',
+    sidebarSplitAndLock: process.env.CODEX_NATIVE_SESSION_ID ? 'passed' : 'not requested',
     nativeDraft: process.env.CODEX_NATIVE_SESSION_ID ? 'passed' : 'not requested',
     codexVersion: vscode.extensions.getExtension('openai.chatgpt')?.packageJSON.version ?? null,
     transcriptRendering: 'not asserted', completedAt: new Date().toISOString(),

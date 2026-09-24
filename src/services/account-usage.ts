@@ -1,18 +1,20 @@
 import * as vscode from 'vscode';
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import * as path from 'node:path';
-import { CODEX_EXTENSION, VERIFIED_CODEX_VERSIONS } from './codex-integration';
+import { CODEX_EXTENSION } from './codex-integration';
 import { parseRecord, record } from '../util/json';
 import { parseAccountUsage, UsageSnapshot } from '../model/usage';
 
 export function bundledCodex(): string | undefined {
   const extension = vscode.extensions.getExtension(CODEX_EXTENSION);
-  if (!extension?.extensionPath || !VERIFIED_CODEX_VERSIONS.includes(extension.packageJSON.version)) return undefined;
+  if (!extension?.extensionPath) return undefined;
   if (vscode.env.remoteName || vscode.workspace.getConfiguration('chatgpt').get('runCodexInWindowsSubsystemForLinux', false)) return undefined;
   const platform = process.platform === 'win32' ? 'windows' : process.platform === 'darwin' ? 'macos' : process.platform === 'linux' ? 'linux' : undefined;
   const arch = process.arch === 'x64' ? 'x86_64' : process.arch === 'arm64' ? 'aarch64' : undefined;
   if (!platform || !arch) return undefined;
-  return path.join(extension.extensionPath, 'bin', `${platform}-${arch}`, process.platform === 'win32' ? 'codex.exe' : 'codex');
+  const executable = path.join(extension.extensionPath, 'bin', `${platform}-${arch}`, process.platform === 'win32' ? 'codex.exe' : 'codex');
+  return existsSync(executable) ? executable : undefined;
 }
 
 export async function readAccountUsage(home: string, signal: AbortSignal): Promise<UsageSnapshot | undefined> {
@@ -68,6 +70,6 @@ export function requestLimits(executable: string, home: string, signal: AbortSig
         }
       }
     });
-    send({ id: 0, method: 'initialize', params: { clientInfo: { name: 'codex_workspace_sessions', version: '0.1.13' } } });
+    send({ id: 0, method: 'initialize', params: { clientInfo: { name: 'codex_workspace_sessions', version: '0.1.15' } } });
   });
 }

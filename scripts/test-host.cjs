@@ -17,9 +17,22 @@ async function main() {
   const nativePath = process.env.CODEX_NATIVE_EXTENSION_PATH;
   const nativeId = process.env.CODEX_NATIVE_SESSION_ID;
   if (Boolean(nativePath) !== Boolean(nativeId)) throw new Error('Set both CODEX_NATIVE_EXTENSION_PATH and CODEX_NATIVE_SESSION_ID for the optional native integration check.');
+  const extensionDevelopmentPath = [root];
+  if (nativePath) {
+    extensionDevelopmentPath.push(nativePath);
+    const manifest = JSON.parse(await fs.readFile(path.join(nativePath, 'package.json'), 'utf8'));
+    const extensionDirectory = path.dirname(nativePath);
+    const entries = await fs.readdir(extensionDirectory, { withFileTypes: true });
+    for (const dependency of manifest.extensionDependencies ?? []) {
+      const directory = entries.find(entry => entry.isDirectory() && entry.name === `${dependency}-${manifest.version}`)
+        ?? entries.find(entry => entry.isDirectory() && entry.name.startsWith(`${dependency}-`));
+      if (!directory) throw new Error(`Missing Codex extension dependency: ${dependency}`);
+      extensionDevelopmentPath.push(path.join(extensionDirectory, directory.name));
+    }
+  }
   await runTests({
     vscodeExecutablePath: process.env.VSCODE_EXECUTABLE_PATH,
-    extensionDevelopmentPath: nativePath ? [root, nativePath] : root,
+    extensionDevelopmentPath: nativePath ? extensionDevelopmentPath : root,
     extensionTestsPath: path.join(root, 'test', 'host', 'index.cjs'),
     extensionTestsEnv: { CODEX_NATIVE_SESSION_ID: nativeId },
     launchArgs: [workspace, '--user-data-dir', profile, '--extensions-dir', path.join(root, '.vscode-test', 'extensions'),

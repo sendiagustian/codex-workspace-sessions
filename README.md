@@ -32,7 +32,7 @@ The Usage panel shows the 5-hour and weekly windows as **used percentages**, tog
 - Start a native draft with **+**. Empty drafts stay out of the list until the first user message is saved.
 - An original catalog icon, independent of OpenAI branding.
 - Automatic refresh every 30 seconds while the view is visible.
-- Open the original Codex chat in a separate editor group beside the primary sidebar on a verified Codex version. Later clicks reuse a group containing only Codex tabs.
+- Open the original Codex chat in a separate editor group beside the primary sidebar through the installed Codex extension. Later clicks reuse a group containing only Codex tabs.
 - Automatically lock the chat editor group so ordinary file opening keeps code outside it. Chat tabs stay open rather than using preview mode.
 - Read-only metadata details and a copyable CLI resume command when native tabs are unavailable.
 - No runtime dependencies or telemetry. Current usage is requested through the official bundled Codex app-server using its existing login; this extension does not read credentials or send prompts.
@@ -52,11 +52,11 @@ The editor-group lock is the VS Code padlock shown in the group's title bar. You
 
 **Percentages mean used (terpakai).** Current limits come from the official app-server `account/rateLimits/read` endpoint, refreshed while the panel is visible (default 30 seconds) or with Refresh. The Codex quota bucket is selected explicitly, without adding/subtracting an offset. The panel shows the account update time. If a live read is unavailable, a saved local snapshot is labelled **may be outdated**, or missing data shows a dash. The local snapshot can reflect a previous account after switching logins. API-key accounts may not have ChatGPT subscription limits.
 
-Set `codexWorkspaceSessions.liveUsage` to `false` in User Settings to use only local snapshots. Live reads launch the verified official extension's bundled app-server, use its existing login and configured Codex home, and close after the response. They do not start a model turn. Official Codex may maintain its own caches/logs or refresh its login. An account reading is a point-in-time value, so activity between refreshes can still change the native display.
+Set `codexWorkspaceSessions.liveUsage` to `false` in User Settings to use only local snapshots. Live reads launch the installed official extension's bundled app-server, use its existing login and configured Codex home, and close after the response. They do not start a model turn. Official Codex may maintain its own caches/logs or refresh its login. An account reading is a point-in-time value, so activity between refreshes can still change the native display.
 
 ## Compatibility and honest limits
 
-Native chat tabs currently recognize **OpenAI Codex extension `openai.chatgpt` version `26.908.40401`**. This integration uses VS Code's `vscode.openWith` with the existing Codex custom editor. The editor route is **undocumented by OpenAI and may change**. Other versions show local metadata details instead of guessing a route. Set `codexWorkspaceSessions.nativeTabs` to `false` in User Settings to always use details.
+Native chat tabs use the installed **OpenAI Codex extension `openai.chatgpt`**, without a version allowlist. This integration uses VS Code's `vscode.openWith` with the existing Codex custom editor. The editor route is **undocumented by OpenAI and may change**; if activation or opening fails, the extension shows local metadata details and keeps the CLI resume action available. Set `codexWorkspaceSessions.nativeTabs` to `false` in User Settings to always use details.
 
 This extension does not provide its own model, login, chat backend, or API quota. Sending messages and loading the actual chat are handled by the official Codex extension under its own permissions and privacy policy. Opening a tab does not send a prompt. A native tab may still show a Codex authentication or loading error.
 

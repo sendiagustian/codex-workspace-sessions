@@ -72,15 +72,15 @@ test('an existing mixed code and chat group is never locked', async t => {
   assert.equal(groups.all[2].locked, true);
 });
 
-test('unknown versions, missing Codex, remote hosts and open failures show details', async t => {
+test('any installed Codex version opens natively; missing, remote and failed opens show details', async t => {
   const { controller, session, calls, mock, settings } = await setup(t);
-  mock.extensions.getExtension = () => ({ packageJSON: { version: '99.0.0' } });
+  mock.extensions.getExtension = () => ({ packageJSON: { version: '99.0.0' }, activate: async () => {} });
   await controller.open(session.id);
-  assert.equal(calls.at(-1)[0], 'details');
+  assert.ok(calls.some(call => call[0] === 'vscode.openWith'));
   mock.extensions.getExtension = () => undefined;
   await controller.open(session.id);
   assert.equal(calls.at(-1)[0], 'details');
-  mock.extensions.getExtension = () => ({ packageJSON: { version: '26.908.40401' }, activate: async () => {} });
+  mock.extensions.getExtension = () => ({ packageJSON: { version: '26.917.62051' }, activate: async () => {} });
   mock.env.remoteName = 'ssh-remote';
   await controller.open(session.id);
   assert.equal(calls.at(-1)[0], 'details');

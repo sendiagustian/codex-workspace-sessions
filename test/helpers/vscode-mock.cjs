@@ -33,7 +33,7 @@ function vscodeMock(home, project) {
     TabInputCustom: class { constructor(uri, viewType) { this.uri = uri; this.viewType = viewType; } },
     Uri: { from: value => value, file: value => ({ fsPath: value }), joinPath: (uri, ...parts) => ({ fsPath: path.join(uri.fsPath, ...parts) }) },
     env: { clipboard: { writeText: async text => { calls.push(['clipboard', text]); } } },
-    extensions: { getExtension: () => ({ packageJSON: { version: '26.908.40401' }, activate: async () => { calls.push(['activate']); } }) },
+    extensions: { getExtension: () => ({ packageJSON: { version: '26.917.62051' }, activate: async () => { calls.push(['activate']); } }) },
     commands: { executeCommand: async (...args) => { calls.push(args); } },
     workspace: {
       isTrusted: true,

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.16
+
+- Remove the static Codex version allowlist; use the installed official extension and fall back safely if its undocumented editor route no longer opens.
+- Let live usage use the installed official bundled app-server when its expected binary exists.
+
+## 0.1.15
+
+- Verify and support native Codex session tabs with OpenAI Codex extension 26.917.62051.
+
 ## 0.1.14
 
 - Split the Codex chat toward the side the primary sidebar is on instead of always to the right.

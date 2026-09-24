@@ -2,7 +2,7 @@
 
 Target MVP: sidebar per project, klik sesi membuka tab Codex asli bila integrasi tersedia, fallback detail lokal, pencarian, pin, dan refresh. Tidak ada penghapusan atau penulisan ulang data Codex.
 
-Pemeriksaan 14 September 2026 pada extension resmi `openai.chatgpt` versi `26.908.40401` menemukan:
+Pemeriksaan 24 September 2026 pada extension resmi `openai.chatgpt` versi `26.917.62051` menemukan:
 
 - Manifest menyediakan `chatgpt.openSidebar`, `chatgpt.newCodexPanel`, dan command lain, tetapi tidak menyediakan command publik untuk resume UUID tertentu.
 - Registrasi custom editor memakai `chatgpt.conversationEditor`.
@@ -13,7 +13,7 @@ Integrasi dengan editor Codex memanggil API VS Code `vscode.openWith`. Tidak men
 
 Mulai versi 0.1.1, navigasi editor membuat grup baru ketika belum ada grup khusus chat, lalu memanggil `workbench.action.lockEditorGroup` setelah tab Codex aktif. Sejak 0.1.14 arah split mengikuti `workbench.sideBar.location`: `workbench.action.newGroupLeft` saat sidebar di kiri dan `workbench.action.newGroupRight` saat di kanan, sehingga chat muncul berdampingan dengan sidebar yang membukanya. Perintah split bersifat relatif terhadap grup aktif, jadi pada layout dengan banyak grup posisinya mengikuti grup aktif, bukan selalu tepi jendela. Grup yang hanya berisi tab Codex dipakai kembali; grup berisi file kode tidak dikunci. Klik yang berdekatan diproses berurutan agar tidak membuat beberapa split. Lock adalah fitur editor-group VS Code, bukan larangan memindahkan/menutup grup secara manual.
 
-Allowlist versi berada di `src/services/codex-integration.ts`. Untuk menambahkan versi, periksa kembali kontrak editor dari instalasi resmi, jalankan tes host opsional terhadap sesi milik penguji, dan pastikan transcript serta interaksi UI melalui pengujian manual. Jangan memperluas allowlist semata-mata berdasarkan kemiripan nomor versi.
+Integrasi tidak memakai allowlist versi. Setiap buka sesi, extension mengambil instance `openai.chatgpt` yang terpasang, mengaktifkannya, lalu membuka editor/rute yang diamati. Jika kontrak editor berubah, operasi gagal secara aman ke detail lokal dan perintah CLI resume; tidak ada tebakan rute alternatif. Pada 26.917.62051, custom editor, scheme URI, authority, dan route sesi/draft yang dipakai extension ini telah diuji langsung.
 
 Sumber daftar sesi: header pertama `session_meta` pada rollout lokal, judul dari `session_index.jsonl`. Header harus berisi UUID yang sama dengan nama file dan `cwd` absolut yang sesuai folder aktif. Pencocokan Windows menerima drive case, slash, dan prefix extended path; POSIX case-sensitive. Symlink project tidak otomatis disamakan. Subfolder opsional, worktree tidak otomatis digabung.
 
@@ -28,7 +28,7 @@ Dokumentasi publik: [command Codex](https://learn.chatgpt.com/docs/developer-com
 - Panel sesi memakai WebviewView dengan search permanen. Judul masuk lewat textContent, CSP berbasis nonce, dan pesan hanya menerima action yang dikenal serta UUID anggota daftar. Action tetap diperiksa ulang oleh controller.
 - Tombol + membuka route draft resmi yang teramati, /extension/panel/new, dalam grup chat terkunci. Tidak membuat UUID palsu atau mengirim prompt. Konteks folder mengikuti composer Codex di window aktif; pada multi-root, pengguna memilih folder di composer Codex.
 - Reader hanya menampilkan rollout setelah event_msg dengan payload.type user_message. Role user pada response_item saja tidak cukup karena bisa berupa environment context. Pencarian event dibatasi 8 MiB; file berubah diperiksa ulang. (Aturan ini direvisi pada 0.1.4; lihat bagian di bawah.)
-- Live usage memakai protokol publik initialize → initialized → account/rateLimits/read, melalui executable bawaan extension resmi yang versinya sudah diverifikasi. Hanya bucket codex yang dipakai; usedPercent tetap ditampilkan sebagai terpakai tanpa offset koreksi. Pembacaan lokal menjadi fallback berlabel.
+- Live usage memakai protokol publik initialize → initialized → account/rateLimits/read, melalui executable bawaan extension resmi yang terpasang bila binary platform yang diharapkan ada. Hanya bucket codex yang dipakai; usedPercent tetap ditampilkan sebagai terpakai tanpa offset koreksi. Pembacaan lokal menjadi fallback berlabel.
 - Proses dibatasi 10 detik/1 MiB, tanpa shell, tanpa stderr log, ditutup saat selesai atau akses dicabut. Tidak memanggil thread/start atau turn/start. Dokumentasi: [Codex app-server](https://learn.chatgpt.com/docs/app-server).
 
 ## Versi 0.1.4

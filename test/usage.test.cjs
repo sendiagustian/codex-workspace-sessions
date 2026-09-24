@@ -1,6 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
+const os = require('node:os');
 const path = require('node:path');
 const { parseUsage } = require('../dist/model/usage');
 const { readLatestUsage } = require('../dist/services/usage-reader');
@@ -10,6 +11,23 @@ const { fixture, rollout } = require('./helpers/fixtures.cjs');
 const { loadWithVscode, vscodeMock, Memento } = require('./helpers/vscode-mock.cjs');
 
 const observedAt = '2026-09-14T10:00:00Z';
+
+test('bundled app-server follows the installed Codex extension regardless of version', async t => {
+  const { mock } = vscodeMock('', '');
+  const extensionPath = await fs.mkdtemp(path.join(os.tmpdir(), 'codex-workspace-sessions-'));
+  t.after(() => fs.rm(extensionPath, { recursive: true, force: true }));
+  mock.extensions.getExtension = () => ({ extensionPath, packageJSON: { version: '99.0.0' } });
+  const { bundledCodex } = loadWithVscode(mock, '../dist/services/account-usage');
+  const platform = { win32: 'windows', darwin: 'macos', linux: 'linux' }[process.platform];
+  const arch = { x64: 'x86_64', arm64: 'aarch64' }[process.arch];
+  const expected = platform && arch ? path.join(extensionPath, 'bin', `${platform}-${arch}`, process.platform === 'win32' ? 'codex.exe' : 'codex') : undefined;
+  if (expected) {
+    await fs.mkdir(path.dirname(expected), { recursive: true });
+    await fs.writeFile(expected, '');
+  }
+  assert.equal(bundledCodex(), expected);
+});
+
 function event(percent = 0, overrides = {}) {
   return JSON.stringify({ type: 'event_msg', timestamp: observedAt, payload: { type: 'token_count', rate_limits: {
     limit_id: 'codex', primary: { used_percent: percent, window_minutes: 300, resets_at: 1789398000 },
